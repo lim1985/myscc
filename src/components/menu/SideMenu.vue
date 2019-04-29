@@ -53,7 +53,7 @@
       }
     },
     created () {
-
+      // console.log(this.menus);
     },
     computed: {
       ...mapState({

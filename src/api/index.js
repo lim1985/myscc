@@ -1,13 +1,13 @@
 const api = {
-    Login: 'http://127.0.0.1:3001/api/login',
+    Login: 'http://172.20.8.28:3001/api/login',
     Logout: '/auth/logout',
     ForgePassword: '/auth/forge-password',
     Register: '/auth/register',
     SendSms: '/account/sms',
     // get my info
   //  UserInfo: '/user/info',
-    myuserinfo:'http://127.0.0.1:3001/api/userInfo',
+    myuserinfo:'http://172.20.8.28:3001/api/userInfo',
     UserInfo: '/user/info',
-    mylogin:'/banns'
+    myUserInfo:'http://172.20.8.28:3001/api/admininfo'
 }
 export default api

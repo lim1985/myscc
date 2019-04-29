@@ -27,8 +27,11 @@
         return this.$route.meta.keepAlive
       }
     },
+    mounted(){
+     
+    },
     methods: {
-
+          
     },
   }
 </script>

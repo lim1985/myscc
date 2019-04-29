@@ -43,6 +43,19 @@ export function getInfo() {
     }
   })
 }
+export function getAdminInfo(parameter) {
+  return axios({
+    url: api.myUserInfo,
+    params: parameter,
+    method: 'get',  
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+
+
 
 export function logout() {
   return axios({

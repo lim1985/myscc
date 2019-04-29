@@ -129,7 +129,11 @@
             editable: false,
             department: '财务部'
           }
-        ]
+        ],
+        mylist:[{
+          a:'a'
+        },
+        {b:'b'}],
       }
     },
     methods: {
@@ -147,7 +151,9 @@
         })
       },
       remove (key) {
+        
         const newData = this.data.filter(item => item.key !== key)
+        console.log(newData)
         this.data = newData
       },
       saveRow (key) {

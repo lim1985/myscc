@@ -5,7 +5,7 @@ import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import notification from 'ant-design-vue/es/notification'
-import { ACCESS_TOKEN } from "@/store/mutation-types"
+import { ACCESS_TOKEN,User_ID } from "@/store/mutation-types"
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -13,7 +13,7 @@ const whiteList = ['/user/login', '/user/register', '/user/register-result']// n
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
-    // console.log(ACCESS_TOKEN)
+  // console.log(ACCESS_TOKEN)
   if (Vue.ls.get(ACCESS_TOKEN)) {
    //console.log('生成的token是'+Vue.ls.get(ACCESS_TOKEN));
     /* has token */     
@@ -23,14 +23,19 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       if (store.getters.roles.length === 0) {
-        store.dispatch('GetInfo').then(res => {
-         console.log(res.result)
+
+     let  userid= {AdminID:Vue.ls.get(User_ID)}
+      
+      //  console.log(`userID：`+userid)
+        store.dispatch('myGetInfo',userid).then(res => {
+          // console.log(res)
           const roles = res.result && res.result.role
-        //  console.log(roles);
+       
           store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
+            console.log(store.getters.addRouters)
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          })
+          }) 
         }).catch(() => {
           notification.error({ message: '错误', description: '请求用户信息失败，请重试' })
           store.dispatch('Logout').then(() => {

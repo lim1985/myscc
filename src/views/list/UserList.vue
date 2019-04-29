@@ -5,7 +5,7 @@
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="角色ID">
-              <a-input placeholder="请输入"/>
+              <a-input placeholder="请输入用户"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -26,11 +26,12 @@
         </a-row>
       </a-form>
     </div>
-
+  
+  
     <s-table
       size="default"
       :columns="columns"
-      :data="loadData"
+      :data="myloadData"
     >
       <div
         slot="expandedRowRender"
@@ -51,7 +52,7 @@
         </a-row>
       </div>
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record)">编辑</a>
+        <a @click="MyhandEdit(record)">编辑</a>
         <a-divider type="vertical" />
         <a-dropdown>
           <a class="ant-dropdown-link">
@@ -73,8 +74,29 @@
     </s-table>
 
     <a-modal
+      title="角色赋予"
+      style="top: 220px;"
+      :width="800"
+      v-model="roleslist_visible"  
+      @ok="handleUpdateRoles"   
+    >
+      <a-transfer
+        :dataSource="roleslist"
+        :targetKeys="targetkeys"
+        @change="handleChange"     
+        :listStyle="{
+          width: '300px',
+          height: '300px',
+        }"
+        :render="item=>`${item.title}-${item.discription}`"
+      >
+      </a-transfer>
+   
+    </a-modal>
+
+    <a-modal
       title="操作"
-      style="top: 20px;"
+      style="top: 220px;"
       :width="800"
       v-model="visible"
       @ok="handleOk"
@@ -150,8 +172,8 @@
 
 <script>
   import STable from '@/components/table/'
-  import { getRoleList, getServiceList } from '@/api/manage'
-
+  import { getRolesList ,GetAdmininfobyID ,UpdataAdminBYID} from '@/api/manage'
+//getRoleList, getServiceList,
   export default {
     name: "TableList",
     components: {
@@ -160,7 +182,7 @@
     data () {
       return {
         description: '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
-
+        roleslist_visible:false,
         visible: false,
         labelCol: {
           xs: { span: 24 },
@@ -180,20 +202,25 @@
         // 表头
         columns: [
           {
-            title: '唯一识别码',
-            dataIndex: 'id'
+            title: 'ID',
+            dataIndex: 'AdminID'
           },
           {
-            title: '角色名称',
-            dataIndex: 'name',
+            title: '用户名',
+            dataIndex: 'AdminName'
           },
           {
             title: '状态',
-            dataIndex: 'status'
+            dataIndex: 'IsLock',
+            needTotal: true,
+            key:'IsLock',
+            customRender: text=>{
+              return text ?'锁定':'正常'           
+            } 
           },
           {
             title: '创建时间',
-            dataIndex: 'createTime',
+            dataIndex: 'LastLoginTime',
             sorter: true
           }, {
             title: '操作',
@@ -203,27 +230,183 @@
           }
         ],
         // 加载数据方法 必须为 Promise 对象
-        loadData: parameter => {
-          return getRoleList(parameter)
-            .then(res => {
-              return res.result
-            })
+        // loadData: parameter => {
+        //   return getRoleList(parameter)
+        //     .then(res => {
+        //       return res.result
+        //     })
+        // },
+         // 加载数据方法 必须为 Promise 对象
+        myloadData: parameter => {
+         // console.log(parameter)
+          return this.$http.get('http://172.20.8.28:3001/api/userlist', {
+            params: Object.assign(parameter, this.queryParam),
+           }).then(res => {     
+          //   console.log(res)      
+            if(res.code==-1)
+            {
+                this.$router.push('/login')
+            }
+            return  res.result
+          })
         },
 
         selectedRowKeys: [],
-        selectedRows: []
+        selectedRows: [],
+        roleslist:[],
+        targetkeys:[],
+        Userinfo:{
+          ID:0,
+          Roles:''
+        }
       }
     },
     created () {
-      getServiceList().then(res => {
-        console.log('getServiceList.call()', res)
-      })
-
-      getRoleList().then(res => {
-        console.log('getRoleList.call()', res)
-      })
+      // getServiceList().then(res => {
+      //   console.log('getServiceList.call()', res)
+      // })
+     
+      // getRoleList().then(res => {
+      //   console.log('getRoleList.call()', res)
+      // })
+    
     },
+     mounted() {
+    //  this.loadRoleslist()
+  },
     methods: {
+    handleUpdateRoles()
+    {
+        // console.log(this.targetkeys)
+        // console.log(this.Userinfo.ID)
+        const RolesString=this.targetkeys.join("|")
+       
+       if(!RolesString)
+       {         
+          this.$message.error('请不要提交空数据');  
+          return false         
+       }
+        const data={
+          RolesID:RolesString,
+          ID:this.Userinfo.ID
+        }
+        UpdataAdminBYID(data).then(res=>
+        {
+          if(res.code==1)
+          {
+             this.roleslist_visible=false
+             this.$message.success('角色修改成功！');  
+          }
+          else
+          {
+             
+             this.$message.error('角色修改失败！');  
+          }
+        })
+
+       
+
+    // console.log(this.roleslist[0].key)
+    // console.log(this.targetkeys)
+    
+    //  if(this.roleslist[i].key!=this.targetkeys[i])
+    //   {
+    //      console.log(this.roleslist[i].key==this.targetkeys[i])
+    //     arr.push(this.roleslist[i].key)
+    //   }
+      // console.log(arr)
+ 
+    },
+       renderItem(item) {
+      const customLabel = (
+        <span class="custom-item">
+          {item.title} - {item.discription}
+        </span>
+      );
+      return {
+        label: customLabel, // for displayed item
+        value: item.title, // for title and filter matching
+      };
+    },
+    async loadRoleslist(ID)//读取权限列表
+      {
+     return new Promise ((resole,reject)=>{
+     //根据用户ID读取用户信息
+       GetAdmininfobyID({AdminID:ID}).then(res=>{
+        return res
+       }).then(res=>{
+        // console.log(res)
+        const roles=[]   
+            if(res.result.rolesid!=null)//如果用户权限ID 不等于空
+            {
+               roles.push(res.result.rolesid.split("|")) //获得用户权限ID 数组 | 符号是分割符   
+            //   console.log(roles[0])        
+            }          
+            else
+            {
+              roles.push('75')
+            }           
+                getRolesList().then(res=>{ 
+                 // console.log(res)
+                const _Data=res.result.data
+                const Data=[]
+                const _targetKeys=[]
+             
+                for(let i in _Data)
+                 {                  
+                    const _tempData={
+                          key:_Data[i].roleid.toString(),
+                          title:_Data[i].rolevalue,
+                          discription:_Data[i].roledescription,
+                          chosen: true
+                    }
+            
+               _tempData.chosen=roles[0].indexOf(_Data[i].roleid+'')===-1
+            console.log(_tempData)
+                   if (!_tempData.chosen) {
+                        _targetKeys.push(_tempData.key);
+                      }
+                      // console.log(_targetKeys)                
+                       Data.push(_tempData)
+                    let resbody={
+                      rolelist:Data,
+                      targetKeys:_targetKeys 
+                    }                 
+                    resole(resbody)
+                 }                            
+         })
+       }).catch(err=>{
+         reject(err)
+       })    
+    
+          
+            })
+      },
+      
+     handleChange(targetKeys, direction, moveKeys) {
+       console.log(targetKeys, direction, moveKeys);
+      this.targetkeys = targetKeys       
+     
+    
+    },
+      
+      MyhandEdit(record)
+      {
+        this.mdl=Object.assign({},record)
+        console.log(this.mdl)   
+
+        this.Userinfo.ID=this.mdl.AdminID
+        this.Userinfo.Roles=this.mdl.RolesID
+        this.roleslist_visible=true
+        this.loadRoleslist(this.Userinfo.ID).then(res=>{  
+          console.log(res.rolelist)           
+                    this.roleslist=res.rolelist
+                    this.targetkeys=res.targetKeys
+                    
+              })
+            
+   
+      },
       handleEdit (record) {
         this.mdl = Object.assign({}, record)
 
@@ -232,7 +415,6 @@
             return { label: action.describe, value: action.action, defaultCheck: action.defaultCheck }
           })
         })
-
         this.visible = true
       },
       handleOk () {

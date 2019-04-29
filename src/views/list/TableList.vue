@@ -248,6 +248,7 @@
         loadData: parameter => {
           return getServiceList(Object.assign(parameter, this.queryParam))
             .then(res => {
+              console.log(res.result)
               return res.result
             })
         },
@@ -262,7 +263,7 @@
     methods: {
       handleEdit (record) {
         this.mdl = Object.assign({}, record)
-        console.log(this.mdl)
+        // console.log(this.mdl)
         this.visible = true
       },
       handleOk () {

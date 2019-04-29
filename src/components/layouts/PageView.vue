@@ -26,9 +26,11 @@
         extraImage: '',
         search: false,
         tabs: {}
+       
       }
     },
     mounted () {
+    
       this.getPageHeaderInfo()
     },
     updated () {
@@ -36,24 +38,46 @@
     },
     computed: {
 
-      getTitle () {
+      getTitle() {
         return this.$route.meta.title
       }
+      
 
     },
     methods: {
       getPageHeaderInfo () {
         // eslint-disable-next-line
-        this.title = this.$route.meta.title
+        this.title = this.$route.meta.title     
+        // // console.log(this.$route.meta.permission[0] ) 
+        //   if(this.$route.meta.permission[0]||!this.$route.meta.permission[0]=='Admin')
+        //   {
+        //      this.$store.commit('SET_DEPKEY',this.$route.meta.permission[0]);
+        //   }
+        // this.depkey= this.$route.meta.permission[0]  
+        // if(this.depkey)
+        // {
+        //    this.$store.commit('SET_DEPKEY',this.depkey);
+        // }
+        // console.log(this.depkey)
+      
+         
+       
+        
+
+          //  console.log(this.title)
+        
         // 因为套用了一层 route-view 所以要取 ref 对象下的子节点的第一个对象
         const content = this.$refs.content && this.$refs.content.$children[0]
 
         if (content) {
+      
           this.description = content.description
           this.linkList = content.linkList
           this.extraImage = content.extraImage
           this.search = content.search == true ? true : false
           this.tabs = content.tabs
+        
+          // this.depkey= this.$route.meta.permission[0]     
         }
       }
     }

@@ -1,5 +1,6 @@
-import { asyncRouterMap, constantRouterMap } from "@/config/router.config"
-
+import { asyncRouterMap, constantRouterMap, newasyncRoterMap } from "@/config/router.config"
+import Vue from 'vue'
+import { User_ID } from "@/store/mutation-types"
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
  *
@@ -38,6 +39,7 @@ function hasRole(roles, route) {
 }
 
 function filterAsyncRouter(routerMap, roles) {
+  
   const accessedRouters = routerMap.filter(route => {
     if (hasPermission(roles.permissionList, route)) {
       if (route.children && route.children.length) {
@@ -67,7 +69,14 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+       console.log(asyncRouterMap)
+      //  console.log(typeof(newasyncRoterMap))
+       let  userid= {AdminID:Vue.ls.get(User_ID)}
+       const obj=newasyncRoterMap(userid)
+      //  console.log(typeof(obj))
+      
+        accessedRouters = filterAsyncRouter(obj, roles)
+     
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

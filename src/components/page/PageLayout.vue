@@ -11,6 +11,7 @@
             <a :key="index" :href="link.href">
               <a-icon :type="link.icon"/>
               <span>{{ link.title }}</span>
+              <span>{{ depkey }}</span>
             </a>
           </template>
         </div>
@@ -46,6 +47,10 @@
     },
     // ['desc', 'logo', 'title', 'avatar', 'linkList', 'extraImage']
     props: {
+      depkey:{
+        type:String,
+        default:null
+      },
       desc: {
         type: String,
         default: null

@@ -4,7 +4,6 @@ export default {
   data() {
     return {
       needTotalList: [],
-
       selectedRows: [],
       selectedRowKeys: [],
 

@@ -1,5 +1,105 @@
 import { UserLayout, BasicLayout, RouteView, PageView } from '@/components/layouts'
 
+export const newasyncRoterMap=(params)=>{
+  console.log(`----------------------`)
+  console.log(params)
+let res= [ {
+ path: '/',
+ name: 'index',
+ component: BasicLayout,
+ meta: { title: '首页' },
+ redirect: '/dashboard/analysis',
+ children: [
+   {
+     path: '/dashboard',
+     name: 'dashboard',
+     redirect: '/dashboard/analysis',
+     component: RouteView,
+     meta: { title: '首页', icon: 'dashboard' },
+     children: [
+       {
+         path: '/dashboard/analysis',
+         name: 'Analysis',
+         component: () => import('@/views/dashboard/Analysis'),
+         meta: { title: '工作台' }
+       }       
+     ]   
+   },
+   {
+    path: '/list/QW',
+    name: 'QW',   
+    redirect: {name:'Phonelist_QW'},
+    component: PageView,
+    meta: { title: '区委', icon: 'dashboard', permission: [ 'QW','edit' ] },
+    children: [
+      {
+        path: '/list/UserPhonelist/QW',          
+        name: 'Phonelist_QW',
+        component: () => import('@/views/list/UserPhonelist'),
+        meta: { title: '通信录', permission: [ 'QW' ] }
+      }
+    ]
+  },
+  {
+    path: '/list/QRD',
+    name: 'QRD',
+    redirect: {name:'Phonelist_QRD'},
+    component: PageView,
+    meta: { title: '区人大常委会', icon: 'dashboard', permission: [ 'QRD' ] },
+    children: [
+      {
+        path: '/list/UserPhonelist/QRD',
+        name: 'Phonelist_QRD',
+        component: () => import('@/views/list/UserPhonelist'),
+        meta: { title: '通信录', permission: [ 'QRD' ] }
+      }
+    ]
+  },
+  {
+    path: '/DepartmentManager',
+    name: 'DepartmentManager',
+    redirect: '/Department/manager',
+    component: PageView,
+    meta: { title: '管理', icon: 'dashboard', permission: [ 'Admin' ] },
+    children: [
+      {
+        path: '/Department/manager',
+        name: 'Department',
+        component: () => import('@/views/list/Department'),
+        meta: { title: '部门管理', permission: [ 'Admin' ] }
+      },
+      {
+        path: '/list/old-permission',
+        name: 'old-permission',
+        component: () => import('@/views/list/oldPermissionList'),
+        meta: { title: '原版权限管理', permission: [ 'Admin' ] }
+      },
+     
+      {
+        path: '/list/user-list',
+        name: 'UserList',
+        component: () => import('@/views/list/UserList'),
+        meta: { title: '用户管理', permission: [ 'Admin' ] }
+      },
+      {
+        path: '/list/role-list',
+        name: 'RoleList',
+        component: () => import('@/views/list/RoleList'),
+        meta: { title: '角色管理', permission: [ 'Admin' ] }
+      },
+      {
+        path: '/list/permission-list',
+        name: 'PermissionList',
+        component: () => import('@/views/list/PermissionList'),
+        meta: { title: '部门类别管理', permission: [ 'Admin' ] }
+      },
+    ]
+  },  
+  ]
+ }]
+    return res
+}
+
 export const asyncRouterMap = [
 
   {
@@ -7,127 +107,205 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/monitor',
+    redirect: '/dashboard/analysis',
     children: [
       {
         path: '/dashboard',
         name: 'dashboard',
-        redirect: '/dashboard/monitor',
+        redirect: '/dashboard/analysis',
         component: RouteView,
-        meta: { title: '我的仪表盘', icon: 'dashboard', permission: [ 'dashboard' ] },
+        meta: { title: '首页', icon: 'dashboard' },
         children: [
           {
-            path: '/dashboard/monitor',
+            path: '/dashboard/analysis',
             name: 'Analysis',
             component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '我的分析页', permission: [ 'dashboard' ] }
-          }
+            meta: { title: '工作台' }
+          }       
         ]
       },
-    
- {
-  path: '/myform',
-  redirect: '/myform/basic-form',
-  component: PageView,
-  meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
-  children: [
     {
-      path: '/myform/base-form',
-      name: 'BaseForm',
-      component: () => import('@/views/form/BasicForm'),
-      meta: { title: '基础表单', permission: [ 'form' ] }
+      path: '/list/QW',
+      name: 'QW',   
+      redirect: {name:'Phonelist_QW'},
+      component: PageView,
+      meta: { title: '区委', icon: 'dashboard', permission: [ 'QW' ] },
+      children: [
+        {
+          path: '/list/UserPhonelist/QW',          
+          name: 'Phonelist_QW',
+          component: () => import('@/views/list/UserPhonelist'),
+          meta: { title: '通信录', permission: [ 'QW' ] }
+        }
+      ]
     },
     {
-      path: '/myform/step-form',
-      name: 'StepForm',
-      component: () => import('@/views/form/stepForm/StepForm'),
-      meta: { title: '分步表单', permission: [ 'form' ] }
+      path: '/list/QSHFZBZXT',
+      name: 'QSHFZBZXT',   
+      redirect: {name:'Phonelist_QSHFZBZXT'},
+      component: PageView,
+      meta: { title: '区社会发展与保障系统', icon: 'dashboard', permission: [ 'QSHFZBZXT' ] },
+      children: [
+        {
+          path: '/list/UserPhonelist/QTJJ',          
+          name: 'Phonelist_QTJJ',        
+          component: () => import('@/views/list/UserPhonelist'),
+          meta: { title: '区统计局',},       
+          children: [
+            {
+              path: '/list/UserPhonelist/QW',          
+              name: 'Phonelist_QTJJ',
+              component: () => import('@/views/list/UserPhonelist'),
+              meta: { title: '通信录', permission: [ 'QW' ] }
+            },      
+            {
+              path: '/list/UserPhonelist/QW',          
+              name: 'Phonelist_QTJJ',
+              component: () => import('@/views/list/UserPhonelist'),
+              meta: { title: '自定义通讯录', permission: [ 'QW' ] }
+            },       
+          ]
+        }
+      ]
     },
-    {
-      path: '/myform/advanced-form',
-      name: 'AdvanceForm',
-      component: () => import('@/views/form/advancedForm/AdvancedForm'),
-      meta: { title: '高级表单', permission: [ 'form' ] }
-    }
-  ]
-},
-      // forms
-      // {
-      //   path: '/form',
-      //   redirect: '/form/basic-form',
-      //   component: PageView,
-      //   meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
-      //   children: [
-      //     {
-      //       path: '/form/base-form',
-      //       name: 'BaseForm',
-      //       component: () => import('@/views/form/BasicForm'),
-      //       meta: { title: '基础表单', permission: [ 'form' ] }
-      //     },
-      //     {
-      //       path: '/form/step-form',
-      //       name: 'StepForm',
-      //       component: () => import('@/views/form/stepForm/StepForm'),
-      //       meta: { title: '分步表单', permission: [ 'form' ] }
-      //     },
-      //     {
-      //       path: '/form/advanced-form',
-      //       name: 'AdvanceForm',
-      //       component: () => import('@/views/form/advancedForm/AdvancedForm'),
-      //       meta: { title: '高级表单', permission: [ 'form' ] }
-      //     }
-      //   ]
-      // },
-
-      // list
       {
-        path: '/list',
-        name: 'list',
+        path: '/list/QRD',
+        name: 'QRD',
+        redirect: {name:'Phonelist_QRD'},
         component: PageView,
-        redirect: '/list/query-list',
-        meta: { title: '列表页', icon: 'table', permission: [ 'table' ] },
+        meta: { title: '区人大常委会', icon: 'dashboard', permission: [ 'QRD' ] },
         children: [
           {
-            path: '/list/query-list',
-            name: 'QueryList',
-            component: () => import('@/views/list/TableList'),
-            meta: { title: '查询表格', permission: [ 'table' ] }
-          },
+            path: '/list/UserPhonelist/QRD',
+            name: 'Phonelist_QRD',
+            component: () => import('@/views/list/UserPhonelist'),
+            meta: { title: '通信录', permission: [ 'QRD' ] }
+          }
+        ]
+      },   
+      {
+        path: '/list/QXZ_XT',
+        name: 'QXZ_XT',
+        redirect: {name:'Phonelist_QLSZ'},
+        component: PageView,
+        meta: { title: '区乡镇系统', icon: 'dashboard', permission: [ 'QXZ_XT' ] },
+        children: [
           {
-            path: '/list/edit-table',
-            name: 'EditList',
-            component: () => import('@/views/list/TableInnerEditList'),
-            meta: { title: '内联编辑表格', permission: [ 'table' ] }
+            path: '/list/UserPhonelist/LSZ',
+            name: 'Phonelist_QLSZ',
+            component: () => import('@/views/list/UserPhonelist'),
+            meta: { title: '罗市镇' }
+          }
+        ]
+      }, 
+      {
+        path: '/DepartmentManager',
+        name: 'DepartmentManager',
+        redirect: '/Department/manager',
+        component: PageView,
+        meta: { title: '管理', icon: 'dashboard', permission: [ 'Admin' ] },
+        children: [
+          {
+            path: '/Department/manager',
+            name: 'Department',
+            component: () => import('@/views/list/Department'),
+            meta: { title: '部门管理', permission: [ 'Admin' ] }
           },
           {
             path: '/list/user-list',
             name: 'UserList',
             component: () => import('@/views/list/UserList'),
-            meta: { title: '用户列表', permission: [ 'table' ] }
+            meta: { title: '用户管理', permission: [ 'Admin' ] }
           },
           {
             path: '/list/role-list',
             name: 'RoleList',
             component: () => import('@/views/list/RoleList'),
-            meta: { title: '角色列表', permission: [ 'table' ] }
+            meta: { title: '角色管理', permission: [ 'Admin' ] }
           },
           {
             path: '/list/permission-list',
             name: 'PermissionList',
             component: () => import('@/views/list/PermissionList'),
-            meta: { title: '权限列表', permission: [ 'table' ] }
+            meta: { title: '部门类别管理', permission: [ 'Admin' ] }
+          },
+        ]
+      },  
+      {
+  path: '/myform',
+  redirect: '/myform/basic-form',
+  component: PageView,
+  meta: { title: '自定义组', icon: 'form'  },//区人大permission
+  children: [
+    {
+      path: '/myform/base-form',
+      name: 'BaseForm',
+      component: () => import('@/views/form/BasicForm'),
+      meta: { title: '管理组' }
+    },
+    {
+      path: '/myform/step-form',
+      name: 'StepForm',
+      component: () => import('@/views/form/stepForm/StepForm'),
+      meta: { title: '分步表单' }
+    },
+    {
+      path: '/myform/advanced-form',
+      name: 'AdvanceForm',
+      component: () => import('@/views/form/advancedForm/AdvancedForm'),
+      meta: { title: '高级表单' }
+      }
+    ]
+},
+    
+      {
+        path: '/list',
+        name: 'list',
+        component: PageView,
+        redirect: '/list/query-list',
+        meta: { title: 'guanli2', icon: 'table', permission: [ 'Admin' ] },
+        children: [
+          {
+            path: '/list/query-list',
+            name: 'QueryList',
+            component: () => import('@/views/list/TableList'),
+            meta: { title: '查询表格', permission: [ 'Admin' ] }
+          },
+          {
+            path: '/list/edit-table',
+            name: 'EditList',
+            component: () => import('@/views/list/TableInnerEditList'),
+            meta: { title: '内联编辑表格', permission: [ 'Admin' ] }
+          },
+          {
+            path: '/list/user-list',
+            name: 'UserList',
+            component: () => import('@/views/list/UserList'),
+            meta: { title: '用户管理', permission: [ 'Admin' ] }
+          },
+          {
+            path: '/list/role-list',
+            name: 'RoleList',
+            component: () => import('@/views/list/RoleList'),
+            meta: { title: '角色管理', permission: [ 'Admin' ] }
+          },
+          {
+            path: '/list/permission-list',
+            name: 'PermissionList',
+            component: () => import('@/views/list/PermissionList'),
+            meta: { title: '权限管理', permission: [ 'Admin' ] }
           },
           {
             path: '/list/basic-list',
             name: 'BasicList',
             component: () => import('@/views/list/StandardList'),
-            meta: { title: '标准列表', permission: [ 'table' ] }
+            meta: { title: '标准列表', permission: [ 'Admin' ] }
           },
           {
             path: '/list/card',
             name: 'CardList',
             component: () => import('@/views/list/CardList'),
-            meta: { title: '卡片列表', permission: [ 'table' ] }
+            meta: { title: '卡片列表', permission: [ 'Admin' ] }
           },
           {
             path: '/list/search',
