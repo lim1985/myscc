@@ -12,12 +12,18 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
+//let data ={remember_me: true, username: "1", password: "c4ca4238a0b923820dcc509a6f75849b"}
 export function login(parameter) {
   return axios({
-    url: '/auth/login',
+  //url:'http://localhost:8080/banns',
+    url: api.Login,
+  // url:'/auth/login',
     method: 'post',
-    data: parameter
-  })
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  }) 
 }
 
 export function getSmsCaptcha(parameter) {
@@ -30,8 +36,8 @@ export function getSmsCaptcha(parameter) {
 
 export function getInfo() {
   return axios({
-    url: '/user/info',
-    method: 'get',
+    url: api.UserInfo,
+    method: 'get',  
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }

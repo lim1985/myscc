@@ -15,6 +15,7 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
     // console.log(ACCESS_TOKEN)
   if (Vue.ls.get(ACCESS_TOKEN)) {
+   //console.log('生成的token是'+Vue.ls.get(ACCESS_TOKEN));
     /* has token */     
     if (to.path === '/user/login') {
       next({ path: '/dashboard/workplace' })
@@ -23,8 +24,9 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => {
-              console.log(res.result)
+         console.log(res.result)
           const roles = res.result && res.result.role
+        //  console.log(roles);
           store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record

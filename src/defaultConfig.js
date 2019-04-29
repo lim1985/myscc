@@ -12,7 +12,7 @@
 export default {
   primaryColor: '#1890FF', // primary color of ant design
   navTheme: 'dark', // theme for nav menu
-  layout: 'sidemenu',
+  layout: 'sidemenu',//sidemenu||topmenu
   colorWeak: false,
   // vue-ls options
   storageOptions: {

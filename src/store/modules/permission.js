@@ -47,6 +47,7 @@ function filterAsyncRouter(routerMap, roles) {
     }
     return false
   })
+  // console.log(accessedRouters)
   return accessedRouters
 }
 

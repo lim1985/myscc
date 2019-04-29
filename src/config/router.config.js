@@ -24,64 +24,7 @@ export const asyncRouterMap = [
           }
         ]
       },
-      // dashboard
-      {
-        path: '/mydashboard',
-        name: 'dashboard',
-        redirect: '/mydashboard/monitor',
-        component: RouteView,
-        meta: { title: '仪表盘', icon: 'dashboard', permission: [ 'dashboard' ] },
-        children: [
-          {
-            path: '/mydashboard/analysis',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', permission: [ 'dashboard' ] }
-          },
-          {
-            path: '/dashboard/monitor',
-            name: 'Monitor',
-            hidden: true,
-            component: () => import('@/views/dashboard/Monitor'),
-            meta: { title: '监控页', permission: [ 'dashboard' ] }
-          },
-          {
-            path: '/mydashboard/workplace',
-            name: 'Workplace',
-            component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '工作台', permission: [ 'dashboard' ] }
-          }
-        ]
-      },
-      // {
-      //   path: '/dashboard',
-      //   name: 'dashboard',
-      //   redirect: '/dashboard/monitor',
-      //   component: RouteView,
-      //   meta: { title: '仪表盘', icon: 'dashboard', permission: [ 'dashboard' ] },
-      //   children: [
-      //     {
-      //       path: '/dashboard/analysis',
-      //       name: 'Analysis',
-      //       component: () => import('@/views/dashboard/Analysis'),
-      //       meta: { title: '分析页', permission: [ 'dashboard' ] }
-      //     },
-      //     {
-      //       path: '/dashboard/monitor',
-      //       name: 'Monitor',
-      //      // hidden: true,
-      //       component: () => import('@/views/dashboard/Monitor'),
-      //       meta: { title: '监控页', permission: [ 'dashboard' ] }
-      //     },
-      //     {
-      //       path: '/dashboard/workplace',
-      //       name: 'Workplace',
-      //       component: () => import('@/views/dashboard/Workplace'),
-      //       meta: { title: '工作台', permission: [ 'dashboard' ] }
-      //     }
-      //   ]
-      // },
- // forms
+    
  {
   path: '/myform',
   redirect: '/myform/basic-form',
@@ -109,32 +52,32 @@ export const asyncRouterMap = [
   ]
 },
       // forms
-      {
-        path: '/form',
-        redirect: '/form/basic-form',
-        component: PageView,
-        meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
-        children: [
-          {
-            path: '/form/base-form',
-            name: 'BaseForm',
-            component: () => import('@/views/form/BasicForm'),
-            meta: { title: '基础表单', permission: [ 'form' ] }
-          },
-          {
-            path: '/form/step-form',
-            name: 'StepForm',
-            component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: '分步表单', permission: [ 'form' ] }
-          },
-          {
-            path: '/form/advanced-form',
-            name: 'AdvanceForm',
-            component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: '高级表单', permission: [ 'form' ] }
-          }
-        ]
-      },
+      // {
+      //   path: '/form',
+      //   redirect: '/form/basic-form',
+      //   component: PageView,
+      //   meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
+      //   children: [
+      //     {
+      //       path: '/form/base-form',
+      //       name: 'BaseForm',
+      //       component: () => import('@/views/form/BasicForm'),
+      //       meta: { title: '基础表单', permission: [ 'form' ] }
+      //     },
+      //     {
+      //       path: '/form/step-form',
+      //       name: 'StepForm',
+      //       component: () => import('@/views/form/stepForm/StepForm'),
+      //       meta: { title: '分步表单', permission: [ 'form' ] }
+      //     },
+      //     {
+      //       path: '/form/advanced-form',
+      //       name: 'AdvanceForm',
+      //       component: () => import('@/views/form/advancedForm/AdvancedForm'),
+      //       meta: { title: '高级表单', permission: [ 'form' ] }
+      //     }
+      //   ]
+      // },
 
       // list
       {

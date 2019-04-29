@@ -11,7 +11,8 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
-    userinfo:''
+    userinfo:'',
+    userID:''
   },
 
   mutations: {
@@ -34,31 +35,50 @@ const user = {
     SET_USERINFO: (state, userinfo) => {
       state.userinfo = userinfo
     },
+    SET_USERID:(state,userID)=>{
+      state.userID=userID
+    }
   },
 
   actions: {
     // 登录
     Login({ commit }, userInfo) {
+      console.log('登录页输入的内容：');
+       console.log(userInfo);
       return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
-          const result = response.result
-          console.log(result);
-          Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_USERINFO', result.username)
-          commit('SET_TOKEN', result.token)
-          resolve()
+        login(userInfo).then(res => {
+          console.log('服务器打印的')
+       
+          if(res.code===1)
+          {
+            console.log(res.userinfo.AdminID)
+           
+            Vue.ls.set(ACCESS_TOKEN, res.token, 7 * 24 * 60 * 60 * 1000)     
+            
+            commit('SET_USERID',res.userinfo.AdminID)  
+            commit('SET_USERINFO',res.userinfo)              
+            commit('SET_TOKEN',res.token)     
+           
+            resolve(res)
+          }
+          else
+          {
+            console.log(res)
+            resolve(res)
+          }
+        
+        
         }).catch(error => {
           reject(error)
         })
       })
-    },
-
+    }, 
     // 获取用户信息
     GetInfo({ commit }) {
+    
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
           const result = response.result
-
           if (result.role && result.role.permissions.length > 0) {
             const role = result.role
             role.permissions = result.role.permissions
@@ -75,10 +95,8 @@ const user = {
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-
           commit('SET_NAME', { name: result.name, welcome: welcome() })
           commit('SET_AVATAR', result.avatar)
-
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -91,6 +109,9 @@ const user = {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
+        commit('SET_USERID', '')
+
+        
         Vue.ls.remove(ACCESS_TOKEN)
 
         logout(state.token).then(() => {

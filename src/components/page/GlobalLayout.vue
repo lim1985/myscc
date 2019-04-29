@@ -102,6 +102,7 @@
     },
     created() {
       this.menus = this.mainMenu.find((item) => item.path === '/').children
+      console.log( this.menus)
     },
     methods: {
       ...mapActions(['setSidebar']),

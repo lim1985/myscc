@@ -98,7 +98,7 @@
   import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
   import { mapActions } from "vuex"
   import { timeFix } from "@/utils/util"
-
+  // import user from '@/store/modules/user'
   export default {
     components: {
       TwoStepCaptcha
@@ -109,7 +109,7 @@
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
-        requiredTwoStepCaptcha: true,
+        requiredTwoStepCaptcha: false,
         stepCaptchaVisible: false,
         form: null,
         state: {
@@ -128,6 +128,7 @@
     created () {
       this.$http.get('/auth/2step-code')
         .then(res => {
+        //  console.log(res);
           this.requiredTwoStepCaptcha = res.result.stepCode
         }).catch(err => {
           console.log('2step-code:', err)
@@ -164,10 +165,14 @@
           that.form.validateFields([ 'username', 'password' ], { force: true }, (err, values) => {
             if (!err) {
               flag = true
+             // console.log(username , password);
+           //  console.log(values.username+','+values.password);
               loginParams[!that.loginType ? 'email' : 'username'] = values.username
               loginParams.password = md5(values.password)
+              //console.log(loginParams);
             }
           })
+          
         // 使用手机号登陆
         } else {
           that.form.validateFields([ 'mobile', 'captcha' ], { force: true }, (err, values) => {
@@ -181,16 +186,30 @@
         if (!flag) return
 
         that.loginBtn = true
-
-        that.Login(loginParams).then(() => {
-          if (that.requiredTwoStepCaptcha) {
-            that.stepCaptchaVisible = true
-          } else {
-            that.loginSuccess()
+       // console.log(loginParams)
+        that.Login(loginParams).then((res) => {
+          console.log('服务器回传的')
+          console.log(res);   
+          if(res.code===1)
+          {
+            that.loginSuccess(res)    
+          }    
+          else
+          {
+            this.$message.error(timeFix()+','+ res.message, 3)
+            that.loginBtn = false
           }
-        }).catch((err) => {
-          that.requestFailed(err);
+       //  console.log($user.state.SET_USERINFO);
+       
+          // if (that.requiredTwoStepCaptcha) {
+          //   that.stepCaptchaVisible = false
+          // } else {
+          //   that.loginSuccess()
+          // }
         })
+        // .catch((err) => {
+        //   that.requestFailed(err);
+        // })
 
       },
       getCaptcha (e) {
@@ -240,10 +259,10 @@
           this.stepCaptchaVisible = false
         })
       },
-      loginSuccess () {
+      loginSuccess (res) {
         this.loginBtn = false
-        this.$router.push({ name: "dashboard" })
-        this.$message.success(timeFix() + '，欢迎回来', 3)
+        this.$router.push({ name: "index" })
+        this.$message.success(timeFix()+res.username + '，欢迎回来', 3)
       },
       requestFailed (err) {
         this.$notification[ 'error' ]({
